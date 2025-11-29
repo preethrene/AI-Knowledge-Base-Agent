@@ -45,9 +45,9 @@ The AI gives accurate answers with sources — all **offline** and **private**.
 
 ## 📸 Screenshots
 
-| Home Page | Ask a Question | Ready Screen |
+| Home Page | Ask a Question | Q n A |
 |-----------|----------------|--------------|
-| ![Home](https://raw.githubusercontent.com/preethrene/AI-Knowledge-Base-Agent/main/screenshots/home.png) | ![QnA](https://raw.githubusercontent.com/preethrene/AI-Knowledge-Base-Agent/main/screenshots/qna.png) | ![Ready](https://raw.githubusercontent.com/preethrene/AI-Knowledge-Base-Agent/main/screenshots/ready.png) |
+| ![Home](https://raw.githubusercontent.com/preethrene/AI-Knowledge-Base-Agent/main/screenshots/home.png) | ![Ask](https://raw.githubusercontent.com/preethrene/AI-Knowledge-Base-Agent/main/screenshots/ready.png) | ![QnA](https://raw.githubusercontent.com/preethrene/AI-Knowledge-Base-Agent/main/screenshots/qna.png) | 
 
 
 ---
