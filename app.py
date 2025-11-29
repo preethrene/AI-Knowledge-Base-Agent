@@ -15,6 +15,7 @@ st.set_page_config(page_title="AI Knowledge Base Agent", layout="wide")
 
 HISTORY_FILE = "chat_history.json"
 
+
 # ============== CSS THEMES ==============
 
 DARK_THEME_CSS = """
@@ -25,7 +26,6 @@ html, body, [data-testid="stAppViewContainer"] {
     font-family: 'Inter', sans-serif;
 }
 
-/* Header gradient box */
 .hero-box {
     background: linear-gradient(90deg, #38bdf8, #6366f1, #a855f7);
     padding: 24px;
@@ -37,28 +37,23 @@ html, body, [data-testid="stAppViewContainer"] {
     box-shadow: 0 8px 25px rgba(0,0,0,0.4);
 }
 
-/* Subtitle in header */
 .hero-sub {
     font-size: 14px;
-    font-weight: 400;
     color: #e5e7eb;
 }
 
-/* Sidebar */
 [data-testid="stSidebar"] {
     background: #111827;
     color: white;
     border-right: 1px solid #1f2937;
 }
 
-/* File uploader box */
 [data-testid="stFileUploader"] section {
     border-radius: 12px;
     border: 1px dashed #4b5563;
     background: #020617;
 }
 
-/* Text input (question box) */
 .stTextInput > div > div > input {
     background: #1f2937 !important;
     color: #e5e7eb !important;
@@ -67,7 +62,6 @@ html, body, [data-testid="stAppViewContainer"] {
     border: 1px solid #374151 !important;
 }
 
-/* User bubble */
 .chat-bubble-user {
     background: #1e3a8a;
     color: white;
@@ -78,7 +72,6 @@ html, body, [data-testid="stAppViewContainer"] {
     margin-bottom: 8px;
 }
 
-/* AI bubble */
 .chat-bubble-ai {
     background: #111827;
     color: #e5e7eb;
@@ -89,7 +82,6 @@ html, body, [data-testid="stAppViewContainer"] {
     margin-bottom: 8px;
 }
 
-/* Source card */
 .source-card {
     background: #1f2937;
     border: 1px solid #374151;
@@ -97,12 +89,6 @@ html, body, [data-testid="stAppViewContainer"] {
     border-radius: 8px;
     margin-bottom: 6px;
     color: #d1d5db;
-}
-
-/* Buttons */
-.stButton > button {
-    border-radius: 999px;
-    font-weight: 600;
 }
 </style>
 """
@@ -115,7 +101,6 @@ html, body, [data-testid="stAppViewContainer"] {
     font-family: 'Inter', sans-serif;
 }
 
-/* Header box */
 .hero-box {
     background: linear-gradient(90deg, #6366f1, #22c55e);
     padding: 24px;
@@ -129,25 +114,21 @@ html, body, [data-testid="stAppViewContainer"] {
 
 .hero-sub {
     font-size: 14px;
-    font-weight: 400;
     color: #e5e7eb;
 }
 
-/* Sidebar */
 [data-testid="stSidebar"] {
     background: #ffffff;
     color: #111827;
     border-right: 1px solid #e5e7eb;
 }
 
-/* File uploader */
 [data-testid="stFileUploader"] section {
     border-radius: 12px;
     border: 1px dashed #9ca3af;
     background: #f9fafb;
 }
 
-/* Question input */
 .stTextInput > div > div > input {
     background: #ffffff !important;
     color: #111827 !important;
@@ -156,7 +137,6 @@ html, body, [data-testid="stAppViewContainer"] {
     border: 1px solid #d1d5db !important;
 }
 
-/* User bubble */
 .chat-bubble-user {
     background: #2563eb;
     color: white;
@@ -167,7 +147,6 @@ html, body, [data-testid="stAppViewContainer"] {
     margin-bottom: 8px;
 }
 
-/* AI bubble */
 .chat-bubble-ai {
     background: #e5e7eb;
     color: #111827;
@@ -178,7 +157,6 @@ html, body, [data-testid="stAppViewContainer"] {
     margin-bottom: 8px;
 }
 
-/* Source card */
 .source-card {
     background: #f9fafb;
     border: 1px solid #e5e7eb;
@@ -190,7 +168,8 @@ html, body, [data-testid="stAppViewContainer"] {
 </style>
 """
 
-# ============== SIDEBAR (Theme + Upload + Build) ==============
+
+# ============== SIDEBAR ==============
 with st.sidebar:
     st.title("⚙️ Controls")
 
@@ -198,18 +177,16 @@ with st.sidebar:
 
     st.markdown("### 📁 Upload Documents")
     uploaded_files = st.file_uploader(
-        "Upload PDF / TXT / DOCX",
+        "Upload PDF/TXT/DOCX",
         type=["pdf", "txt", "docx"],
         accept_multiple_files=True
     )
 
     build_btn = st.button("🚀 Build Knowledge Base")
 
-    st.markdown("---")
-    st.markdown("Chat will be saved locally in `chat_history.json`.")
-
 # Apply theme CSS
 st.markdown(DARK_THEME_CSS if dark_mode else LIGHT_THEME_CSS, unsafe_allow_html=True)
+
 
 # ============== HEADER ==============
 st.markdown("""
@@ -222,6 +199,7 @@ Upload files → Ask anything → 100% Local AI (Phi-3) · Offline · Free
 </div>
 """, unsafe_allow_html=True)
 
+
 # ============== LANGCHAIN IMPORTS ==============
 from langchain_community.document_loaders import PyPDFLoader, TextLoader, Docx2txtLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -232,26 +210,8 @@ from langchain_classic.chains.retrieval_qa.base import RetrievalQA
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 
-# ============== CHAT HISTORY HELPERS ==============
 
-def load_history_from_file() -> List[dict]:
-    if os.path.exists(HISTORY_FILE):
-        try:
-            with open(HISTORY_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception:
-            return []
-    return []
-
-
-def save_history_to_file(history: List[dict]) -> None:
-    try:
-        with open(HISTORY_FILE, "w", encoding="utf-8") as f:
-            json.dump(history, f, ensure_ascii=False, indent=2)
-    except Exception:
-        pass
-
-
+# ============== PDF EXPORT ==============
 def generate_pdf_from_history(history: List[dict]) -> bytes:
     buffer = io.BytesIO()
     p = canvas.Canvas(buffer, pagesize=letter)
@@ -264,8 +224,8 @@ def generate_pdf_from_history(history: List[dict]) -> bytes:
     p.setFont("Helvetica", 11)
 
     for item in history:
-        q = "Q: " + item.get("q", "")
-        a = "A: " + item.get("a", "")
+        q = "Q: " + item["q"]
+        a = "A: " + item["a"]
 
         for line in [q, a, ""]:
             wrapped = []
@@ -287,13 +247,12 @@ def generate_pdf_from_history(history: List[dict]) -> bytes:
     buffer.seek(0)
     return buffer.getvalue()
 
+
 # ============== DOCUMENT LOADER ==============
-
-def load_documents(uploaded_files, progress_bar=None) -> List:
+def load_documents(uploaded_files) -> List:
     docs = []
-    total = len(uploaded_files) if uploaded_files else 0
 
-    for idx, uploaded_file in enumerate(uploaded_files):
+    for uploaded_file in uploaded_files:
         ext = os.path.splitext(uploaded_file.name)[1].lower()
 
         with tempfile.NamedTemporaryFile(delete=False, suffix=ext) as tmp:
@@ -303,7 +262,7 @@ def load_documents(uploaded_files, progress_bar=None) -> List:
         if ext == ".pdf":
             loader = PyPDFLoader(temp_path)
         elif ext == ".txt":
-            loader = TextLoader(temp_path, encoding="utf-8")
+            loader = TextLoader(temp_path)
         elif ext == ".docx":
             loader = Docx2txtLoader(temp_path)
         else:
@@ -313,17 +272,14 @@ def load_documents(uploaded_files, progress_bar=None) -> List:
         file_docs = loader.load()
         for d in file_docs:
             d.metadata["source"] = uploaded_file.name
+
         docs.extend(file_docs)
-
         os.remove(temp_path)
-
-        if progress_bar is not None and total > 0:
-            progress_bar.progress((idx + 1) / total)
 
     return docs
 
-# ============== VECTOR DB ==============
 
+# ============== VECTOR DB ==============
 def build_vector_db(documents):
     splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=150)
     chunks = splitter.split_documents(documents)
@@ -337,58 +293,44 @@ def build_vector_db(documents):
     )
     return vectorstore
 
-# ============== SESSION STATE ==============
+
+# ============== STATE INIT ==============
 if "vectorstore" not in st.session_state:
     st.session_state.vectorstore = None
 if "qa_chain" not in st.session_state:
     st.session_state.qa_chain = None
 if "history" not in st.session_state:
-    st.session_state.history = load_history_from_file()
+    st.session_state.history = []
+
 
 # ============== BUILD KNOWLEDGE BASE ==============
 if build_btn:
     if not uploaded_files:
-        st.warning("Please upload at least one document.")
+        st.warning("Please upload documents first.")
     else:
         with st.spinner("Processing documents..."):
-            progress = st.progress(0)
-            docs = load_documents(uploaded_files, progress_bar=progress)
-            progress.empty()
 
-            if len(docs) == 0:
-                st.error("No readable text extracted from the uploaded files.")
-            else:
-                vectorstore = build_vector_db(docs)
-                st.session_state.vectorstore = vectorstore
+            docs = load_documents(uploaded_files)
 
-                # ✅ Use phi3 (you have this installed)
-                llm = Ollama(model="phi3")
+            vectorstore = build_vector_db(docs)
+            st.session_state.vectorstore = vectorstore
 
-                qa = RetrievalQA.from_chain_type(
-                    llm=llm,
-                    chain_type="stuff",
-                    retriever=vectorstore.as_retriever(search_kwargs={"k": 3}),
-                    return_source_documents=True,
-                )
+            llm = Ollama(model="phi3")
 
-                st.session_state.qa_chain = qa
+            qa = RetrievalQA.from_chain_type(
+                llm=llm,
+                chain_type="stuff",
+                retriever=vectorstore.as_retriever(search_kwargs={"k": 3}),
+                return_source_documents=True,
+            )
+
+            st.session_state.qa_chain = qa
 
         st.success("🎉 Knowledge Base Ready!")
 
+
 # ============== CHAT SECTION ==============
 st.subheader("💬 Ask a Question")
-
-# Show previous chat history
-if st.session_state.history:
-    for msg in st.session_state.history:
-        st.markdown(
-            f"<div class='chat-bubble-user'>{msg['q']}</div>",
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            f"<div class='chat-bubble-ai'>{msg['a']}</div>",
-            unsafe_allow_html=True,
-        )
 
 query = st.text_input(
     "",
@@ -396,25 +338,25 @@ query = st.text_input(
     label_visibility="collapsed"
 )
 
-if st.session_state.vectorstore is None or st.session_state.qa_chain is None:
-    st.info("📘 Upload documents and click **Build Knowledge Base** to start.")
+if st.session_state.vectorstore is None:
+    st.info("Upload documents & click **Build Knowledge Base** to start.")
+
 else:
     if st.button("Ask"):
         if query.strip():
-            # Show user bubble
+
             st.markdown(
                 f"<div class='chat-bubble-user'>{query}</div>",
                 unsafe_allow_html=True,
             )
 
-            # Get answer
             with st.spinner("🤖 Thinking..."):
                 result = st.session_state.qa_chain({"query": query})
 
             answer = result["result"]
             sources = result["source_documents"]
 
-            # Typing animation for AI answer
+            # Typing animation
             placeholder = st.empty()
             typed = ""
             for ch in answer:
@@ -425,23 +367,29 @@ else:
                 )
                 time.sleep(0.004)
 
-            # Save to history (session + JSON)
+            # Save to history
             st.session_state.history.append({"q": query, "a": answer})
-            save_history_to_file(st.session_state.history)
 
-            # Sources
-            st.markdown("### 📎 Sources")
+            # === FIX: Deduplicate sources ===
+            unique_sources = {}
             for doc in sources:
+                src = doc.metadata.get("source")
+                if src not in unique_sources:
+                    unique_sources[src] = doc.page_content
+
+            st.markdown("### 📎 Sources")
+            for src, content in unique_sources.items():
                 st.markdown(
-                    f"<div class='source-card'><b>{doc.metadata.get('source')}</b><br>{doc.page_content[:200]}...</div>",
+                    f"<div class='source-card'><b>{src}</b><br>{content[:200]}...</div>",
                     unsafe_allow_html=True,
                 )
+
 
 # ============== EXPORT CHAT AS PDF ==============
 if st.session_state.history:
     pdf_bytes = generate_pdf_from_history(st.session_state.history)
     st.download_button(
-        "📄 Download Chat as PDF",
+        "📄 Download Full Chat History",
         data=pdf_bytes,
         file_name="chat_history.pdf",
         mime="application/pdf",
