@@ -110,14 +110,6 @@ AI_Knowledge_Base_Agent/
 └── README.md
 ```
 
----
-
-## 🤝 Contributing
-
-Pull requests are welcome!  
-If you'd like to contribute improvements, features, or bug fixes, feel free to fork and submit a PR.
-
----
 
 ## 📝 License
 
