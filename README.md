@@ -105,6 +105,7 @@ AI_Knowledge_Base_Agent/
 │── screenshots/
 │   ├── screen1.png
 │   ├── screen2.png
+│   ├── screen3.png
 │── chroma_db/   (auto-generated, ignored in Git)
 └── README.md
 ```
