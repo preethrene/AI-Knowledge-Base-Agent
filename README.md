@@ -1,146 +1,83 @@
-\# 📘 AI Knowledge Base Agent  
+# 📘 AI Knowledge Base Agent  
 
-\### Upload files → Ask questions → Local AI answers using Phi-3 + LangChain + ChromaDB + Streamlit
+### Upload files → Ask questions → Local AI answers using Phi-3 + LangChain + ChromaDB + Streamlit  
 
-
-
-!\[Author](https://img.shields.io/badge/Author-preethrene-blue)
-
-!\[Built With](https://img.shields.io/badge/Built%20With-Python%203.10-yellow)
-
-!\[Framework](https://img.shields.io/badge/Framework-Streamlit-red)
-
-!\[Model](https://img.shields.io/badge/Model-Phi3-%2300b300)
-
-!\[License](https://img.shields.io/badge/License-MIT-green)
-
-
+![Author](https://img.shields.io/badge/Author-preethrene-blue)
+![Built With](https://img.shields.io/badge/Built%20With-Python%203.10-yellow)
+![Framework](https://img.shields.io/badge/Framework-Streamlit-red)
+![Model](https://img.shields.io/badge/Model-Phi3-%2300b300)
+![License](https://img.shields.io/badge/License-MIT-green)
 
 ---
 
+## 🚀 Overview
 
+**AI Knowledge Base Agent** is a fully local, offline document Q&A system.
 
-\## 🚀 Overview
+Upload **PDF, TXT, DOCX** files — the AI reads, indexes, and answers your questions using:
 
+- **Microsoft Phi-3 (via Ollama)**
+- **LangChain RetrievalQA**
+- **ChromaDB vector store**
+- **SentenceTransformer embeddings**
+- **Streamlit UI**
 
-
-\*\*AI Knowledge Base Agent\*\* is a fully local document Q\&A system.  
-
-Upload PDFs, TXT, or DOCX — the AI reads, indexes, and answers questions using:
-
-
-
-\- \*\*Microsoft Phi-3 (via Ollama)\*\*
-
-\- \*\*LangChain RetrievalQA\*\*
-
-\- \*\*ChromaDB vector store\*\*
-
-\- \*\*SentenceTransformer embeddings\*\*
-
-\- \*\*Streamlit frontend\*\*
-
-
-
-💡 \*Everything runs 100% locally — no API keys, no internet required.\*
-
-
+This system works **100% offline**, is **free**, and runs entirely on your laptop.
 
 ---
 
+## 📸 Screenshots
 
+| Home Page | Ask a Question |
+|----------|----------------|
+| ![Home](screenshots/screen1.png) | ![Ask](screenshots/screen2.png) |
 
-\## 🌟 Features
-
-
-
-\### 🔍 Document Understanding  
-
-\- Upload \*\*PDF / TXT / DOCX\*\*  
-
-\- Extracts and chunks text  
-
-\- Creates embeddings  
-
-\- Stores vectors in \*\*ChromaDB\*\*
-
-
-
-\### 🤖 Smart AI Q\&A  
-
-\- Local LLM (\*\*Phi-3\*\*)  
-
-\- Answers based on your files only  
-
-\- Cites sources  
-
-\- Clean chat UI with bubbles  
-
-\- Typing animation for AI responses
-
-
-
-\### 💾 Chat History  
-
-\- Stored locally in `chat\_history.json`  
-
-\- Last question never appears in the input box  
-
-\- Can export entire chat as \*\*PDF\*\*
-
-
-
-\### 🎨 Modern UI  
-
-\- Light/Dark mode  
-
-\- Professional header  
-
-\- Gradient banners  
-
-\- Clean layout  
-
-\- Responsive design
-
-
+*(Update filenames according to your screenshot names)*
 
 ---
 
+## 🧠 Architecture Diagram
 
+```mermaid
+flowchart TD
+    U[User] --> UI[Streamlit UI]
+    UI --> VS[ChromaDB Vector Store]
+    UI --> LLM[Phi-3 via Ollama]
+    VS --> LLM
+    LLM --> UI
 
-\## 🏗 Architecture (High-Level)
+🛠 Features
 
+📄 Upload multiple documents
+⚙️ Auto-indexing
+🔍 Intelligent search (semantic retrieval)
+🤖 Local LLM answers (Phi-3)
+💾 Optional chat history
+📥 Export chat as PDF
+🎨 Dark/Light mode
+⚡ Smooth typing animation
 
+📦 Installation
+git clone https://github.com/preethrene/AI_Knowledge_Base_Agent.git
+cd AI_Knowledge_Base_Agent
+pip install -r requirements.txt
 
-```text
+Download the Phi-3 model:
+ollama pull phi3
 
-User Question
+Run the app:
+streamlit run app.py
 
-&nbsp;     │
+📝 License
 
-&nbsp;     ▼
+MIT License © Preetham N
 
-Streamlit UI
+---
 
-&nbsp;     │
+# ✔️ Your README will now look perfect  
+Badges will show correctly, sections are clean, and screenshots will load beautifully.
 
-&nbsp;     ▼
+---
 
-LangChain RetrievalQA
-
-&nbsp;     │
-
-&nbsp;     ├─> ChromaDB (similar chunks from documents)
-
-&nbsp;     │
-
-&nbsp;     └─> Phi-3 LLM (Ollama)
-
-&nbsp;             │
-
-&nbsp;             ▼
-
-&nbsp;       Final Answer + Sources
-
-
-
+# Want me to completely rewrite the README in a **premium professional style** (like top GitHub projects)?  
+### → I can make it 10× more impressive for recruiters.
